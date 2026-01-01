@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="google-site-verification" content="SusKpCS2q4OjnBfh6cMFnXyDck1EdZ1qOAjiCizBoa0" />
+    <meta name="google-adsense-account" content="ca-pub-2620293665503385">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2620293665503385" crossorigin="anonymous"></script>
+
+    <title>PianoMitra - Online Piano Studio & AI Music Tutor</title>
+    <meta name="description" content="Free online virtual piano. Record music, learn theory with our AI Tutor, and join weekly rhythm challenges. No download required.">
+    
+    <meta property="og:title" content="PianoMitra - Online Piano Studio">
+    <meta property="og:description" content="Play piano in your browser. Record tracks and learn with AI.">
+    <meta property="og:image" content="assets/app-preview.png">
+    
+    <link rel="icon" href="assets/favicon.png" type="image/png" sizes="96x96">
+    <link rel="stylesheet" href="main.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script src="config.js"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <nav class="custom-nav">
+            <a href="index.html" class="nav-brand">
+                <span class="brand-icon">🎹</span>
+                <span class="brand-text">PianoMitra</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="blog.html" class="nav-link-item">Blog</a>
+                <a href="help.html" class="nav-link-item">Help</a>
+                <a href="developer.html" class="nav-link-item">Dev Zone</a>
+            </div>
+
+            <div class="nav-controls">
+                <button id="theme-toggle-btn" class="theme-btn" title="Toggle Theme">☀️</button>
+                <a href="auth.html" class="login-pill">Login</a>
+            </div>
+        </nav>
+
+        <div class="mobile-sub-nav">
+            <a href="blog.html">Blog</a>
+            <a href="instrument.html">Programs</a>
+            <a href="help.html">Help</a>
+            <a href="developer.html">Dev Zone</a>
+        </div>
+
+        <header class="hero-section">
+            <div class="hero-container">
+                
+                <div class="hero-text">
+                    <h1>Your Online <br><span>Piano Studio.</span></h1>
+                    <p>
+                        Experience a responsive virtual piano right in your browser. 
+                        Create music, save your tracks to the cloud, and master the keys with our intelligent tools.
+                    </p>
+                    
+                    <div class="action-area">
+                        <a href="casio.html" class="btn-play-main">
+                            <span>🎹 Play Piano Now</span>
+                        </a>
+                        
+                        <a href="ai.html" class="btn-ai-main">
+                            <span>🤖 Learn with AI Tutor</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-image-container">
+                    <a href="casio.html" class="hero-image-wrapper" title="Click to Start Playing">
+                        <img src="assets/app-preview.png" alt="PianoMitra Interface" class="app-screenshot">
+                    </a>
+                </div>
+
+            </div>
+        </header>
+
+        <section class="features-bar">
+            <div class="features-grid">
+                <div class="info-card">
+                    <span class="icon-lg">⚡</span>
+                    <h3>Instant Access</h3>
+                    <p>No installation required. Works on Chrome, Edge, and Safari directly.</p>
+                </div>
+                <div class="info-card">
+                    <span class="icon-lg">☁️</span>
+                    <h3>Cloud Sync</h3>
+                    <p>Create a free account to save your recordings and access them on any device.</p>
+                </div>
+                <div class="info-card">
+                    <span class="icon-lg">🏆</span>
+                    <h3>Weekly Challenges</h3>
+                    <p>Test your skills against verified tracks in our skill-based arena.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="legal-footer">
+            <div class="legal-links">
+                <a href="about.html">About Us</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+            <p>&copy; 2025 PianoMitra. All rights reserved.</p>
+        </footer>
+
+    </div>
+
+    <div id="cookie-banner" style="display: none;">
+        <div class="cookie-content">
+            <p>🍪 We use cookies to save your preferences. <a href="privacy.html" style="color:var(--secondary-color)">Privacy Policy</a>.</p>
+            <div class="cookie-actions">
+                <button id="accept-cookies" class="btn-accept">Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="theme.js"></script>
+</body>
+</html>

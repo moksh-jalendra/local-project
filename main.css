@@ -1,0 +1,253 @@
+/* main.css - Global Styles & Fixed Mobile Layout */
+
+:root {
+    /* Dark Mode (Default) */
+    --primary-color: #ff3366; 
+    --secondary-color: #00bfff; 
+    --bg-color: #1c1c1c; 
+    --card-bg-color: #2a2a2a; 
+    --text-color: #f0f0f0; 
+    --text-muted: #888;
+    --nav-height: 60px; 
+    --top-bar-height: 60px;
+}
+
+/* Light Mode Overrides */
+body.light-mode {
+    --bg-color: #f4f4f9;
+    --card-bg-color: #ffffff;
+    --text-color: #111;
+    --text-muted: #555;
+    --primary-color: #e62955;
+    --secondary-color: #0088cc;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.app-container {
+    display: flex; flex-direction: column; height: auto; 
+    max-width: 100%; width: 100%; position: relative;
+}
+
+/* --- 1. MAIN HEADER --- */
+.custom-nav {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    width: 100%; 
+    height: 60px; 
+    padding: 0 20px; 
+    max-width: 1200px; 
+    margin: 0 auto;
+    background: transparent;
+    position: absolute; /* Overlays the Hero background */
+    top: 0; left: 0; right: 0;
+    z-index: 20;
+}
+
+.nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand-icon { font-size: 1.8em; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+.brand-text { font-size: 1.4em; font-weight: 900; color: white; letter-spacing: -0.5px; }
+/* Ensure logo is visible in light mode if background is light */
+body.light-mode .brand-text { color: #222; }
+
+.nav-links { display: flex; gap: 20px; }
+.nav-link-item { color: #ccc; text-decoration: none; font-weight: bold; transition: color 0.2s; }
+.nav-link-item:hover { color: var(--secondary-color); }
+
+.nav-controls { display: flex; align-items: center; gap: 15px; }
+.theme-btn {
+    background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 38px; height: 38px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+    font-size: 1.1em; cursor: pointer; color: white;
+}
+.theme-btn:hover { background: rgba(255,255,255,0.2); }
+body.light-mode .theme-btn { color: #333; border-color: #ccc; }
+
+.login-pill {
+    background: var(--card-bg-color); border: 1px solid #555; color: var(--text-color);
+    text-decoration: none; padding: 8px 20px; border-radius: 30px; font-weight: bold; font-size: 0.9em;
+}
+
+/* --- 2. MOBILE SUB NAV --- */
+/* Hidden by default on Desktop */
+.mobile-sub-nav { display: none; }
+
+/* --- 3. HERO SECTION --- */
+.hero-section {
+    min-height: 85vh; 
+    display: flex; align-items: center; justify-content: center;
+    padding: 100px 20px 60px 20px; /* Top padding clears the absolute header */
+    background: radial-gradient(circle at top right, #1a1a1a 0%, var(--bg-color) 100%);
+    position: relative; overflow: hidden;
+}
+body.light-mode .hero-section { background: #f4f4f9; }
+
+/* Grid Pattern Background */
+.hero-section::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none;
+}
+
+.hero-container {
+    max-width: 1200px; width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    align-items: center; position: relative; z-index: 2;
+}
+
+.hero-text h1 { font-size: 3.5em; line-height: 1.1; margin-bottom: 20px; color: white; text-shadow: 0 0 20px rgba(0,0,0,0.5); }
+body.light-mode .hero-text h1 { color: #222; text-shadow: none; }
+.hero-text span { color: var(--primary-color); }
+.hero-text p { font-size: 1.1em; color: #aaa; margin-bottom: 40px; }
+
+.action-area { display: flex; flex-direction: column; gap: 15px; align-items: flex-start; }
+
+.btn-play-main {
+    background: linear-gradient(90deg, var(--primary-color), #ff5e85);
+    color: #000 !important; padding: 18px 45px; border-radius: 50px;
+    font-size: 1.3em; font-weight: 900; text-decoration: none;
+    text-transform: uppercase; box-shadow: 0 10px 30px rgba(255, 51, 102, 0.4);
+    display: inline-flex; align-items: center; gap: 15px;
+    animation: pulse-btn 2s infinite;
+}
+@keyframes pulse-btn {
+    0% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 51, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
+}
+
+.btn-ai-main {
+    background: transparent; color: var(--secondary-color);
+    padding: 15px 40px; border-radius: 50px;
+    font-size: 1.1em; font-weight: bold; text-decoration: none;
+    border: 2px solid var(--secondary-color);
+}
+
+/* --- IMAGE HANDLING (Desktop 3D) --- */
+.hero-image-wrapper {
+    display: block;
+    position: relative; 
+    transform: perspective(1000px) rotateY(-5deg); /* Desktop Tilt */
+    transition: transform 0.5s; 
+    cursor: pointer;
+}
+.hero-image-wrapper:hover { transform: perspective(1000px) rotateY(0deg); }
+
+.app-screenshot {
+    width: 100%; border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5); border: 1px solid #333;
+    display: block;
+}
+
+/* Features */
+.features-bar { background: #151515; padding: 40px 20px; text-align: center; }
+body.light-mode .features-bar { background: #fff; border-top: 1px solid #eee; }
+
+.features-grid {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;
+}
+.info-card { background: var(--card-bg-color); padding: 30px; border-radius: 20px; border: 1px solid rgba(100,100,100,0.1); }
+.icon-lg { font-size: 2.5em; display: block; margin-bottom: 15px; }
+
+/* Footer */
+.legal-footer { padding: 40px 20px; text-align: center; background: var(--card-bg-color); color: var(--text-muted); font-size: 0.8em; }
+.legal-links a { color: var(--text-muted); margin: 0 10px; text-decoration: none; }
+
+/* Cookie Banner */
+#cookie-banner {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    width: 90%; max-width: 600px; background: rgba(30, 30, 30, 0.95);
+    border: 1px solid var(--secondary-color); border-radius: 12px; padding: 20px; z-index: 10000;
+}
+.btn-accept { background: var(--secondary-color); padding: 10px 30px; border-radius: 20px; font-weight: bold; border: none; cursor: pointer; }
+
+
+/* =========================================
+   MOBILE RESPONSIVE FIXES (Max Width 900px)
+   ========================================= */
+@media (max-width: 900px) {
+    
+    /* 1. Header Layout */
+    .custom-nav { padding: 0 15px; height: 60px; position: absolute; }
+    .nav-links { display: none; } /* Hide Desktop Links */
+    
+    /* 2. Show Mobile Sub Nav Bar */
+    .mobile-sub-nav {
+        display: flex; /* Activate it */
+        justify-content: space-around;
+        align-items: center;
+        background: var(--card-bg-color);
+        width: 100%;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(100,100,100,0.1);
+        
+        /* Positioning: Below the 60px header */
+        position: absolute;
+        top: 60px; 
+        left: 0;
+        z-index: 15;
+    }
+    
+    .mobile-sub-nav a {
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.85em;
+        padding: 5px 12px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 15px;
+    }
+
+    /* 3. Hero Section Spacing */
+    .hero-section {
+        /* Add padding top to account for Header (60px) + SubNav (60px) + Gap */
+        padding-top: 140px; 
+    }
+
+    /* 4. Vertical Stack Layout */
+    .hero-container {
+        display: flex;          /* Use Flexbox */
+        flex-direction: column; /* Stack Vertically */
+        gap: 30px;
+        text-align: center;
+    }
+
+    /* 5. Image Fix (No 3D, Vertical Block) */
+    .hero-image-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        order: 2; /* Ensure image is below text */
+        margin-top: 10px;
+    }
+
+    .hero-image-wrapper {
+        transform: none !important; /* REMOVE 3D TILT */
+        width: 100%;
+        max-width: 90%; /* Fit screen width */
+        margin: 0 auto;
+        display: block;
+    }
+
+    .app-screenshot {
+        width: 100%;
+        height: auto;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Simpler shadow */
+    }
+
+    /* 6. Text Adjustments */
+    .hero-text h1 { font-size: 2.5em; }
+    .action-area { align-items: center; width: 100%; }
+    .btn-play-main, .btn-ai-main { width: 100%; justify-content: center; }
+}
