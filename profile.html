@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Studio - PianoMitra</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="profile.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script src="config.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        
+        <header class="top-bar">
+            <h2>My Studio 🎧</h2>
+            <button id="settings-toggle-btn" class="settings-icon-btn">⚙️</button>
+        </header>
+
+        <main class="profile-section">
+            
+            <div id="loading-state" style="text-align: center; padding: 50px; color: #888;">
+                <div class="loader-spinner active" style="margin: 0 auto 10px auto;"></div>
+                <p>Loading Studio...</p>
+            </div>
+
+            <div id="login-prompt" style="display:none; text-align:center; padding:60px 20px;">
+                <h3>Access Your Studio</h3>
+                <p style="color:#888; margin-bottom:20px;">Save tracks and join the community.</p>
+                <a href="auth.html" class="control-btn" style="background:var(--primary-color); color:white; padding:10px 20px; border-radius:20px; text-decoration:none;">Login / Signup</a>
+            </div>
+
+            <div id="profile-content" style="display: none;">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="user-avatar"></div>
+                    <h2 id="user-name">...</h2>
+                    <p id="user-bio" style="color:#888; font-size:0.85em; margin-bottom:10px; font-style:italic;">...</p>
+                    
+                    <div class="stats-row">
+                        <div class="stat-box"><span id="stat-tracks">0</span><label>Tracks</label></div>
+                        <div class="stat-box"><span id="stat-posts">0</span><label>Posts</label></div>
+                        <div class="stat-box"><span id="stat-friends">0</span><label>Friends</label></div>
+                    </div>
+                </div>
+
+                <div class="tab-container">
+                    <button class="tab-btn active" data-tab="tab-tracks">My Tracks</button>
+                    <button class="tab-btn" data-tab="tab-assets">Tones</button>
+                    <button class="tab-btn" data-tab="tab-posts">Posts</button>
+                </div>
+
+                <div id="tab-tracks" class="tab-content active">
+                    <div id="tracks-list" class="item-list"></div>
+                </div>
+                <div id="tab-assets" class="tab-content">
+                    <div id="assets-list" class="item-list"></div>
+                </div>
+                <div id="tab-posts" class="tab-content">
+                    <div id="posts-list" class="item-list"></div>
+                </div>
+            </div>
+        </main>
+
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+        <div id="settings-sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>Settings</h3>
+                <button id="close-sidebar-btn">✕</button>
+            </div>
+            <div class="sidebar-menu">
+                <button id="edit-profile-btn" class="sidebar-item"><span>✏️ Edit Profile</span></button>
+                <button id="theme-sidebar-btn" class="sidebar-item"><span>🌓 Toggle Theme</span></button>
+                <div class="sidebar-divider"></div>
+                <button id="logout-btn" class="sidebar-item logout"><span>🚪 Logout</span></button>
+            </div>
+        </div>
+
+        <div id="edit-overlay" class="share-overlay" style="display: none;">
+            <div class="share-box">
+                <h3>Edit Profile</h3>
+                
+                <label style="display:block; text-align:left; color:#888; font-size:0.8em; margin-bottom:5px;">Display Name</label>
+                <input type="text" id="edit-name-input" class="modal-input" placeholder="Your Name">
+                
+                <label style="display:block; text-align:left; color:#888; font-size:0.8em; margin-bottom:5px; margin-top:15px;">Bio</label>
+                <textarea id="edit-bio-input" class="modal-input" placeholder="Tell us about your music..." rows="3"></textarea>
+                
+                <div class="share-actions" style="margin-top:20px;">
+                    <button id="cancel-edit-btn" class="control-btn" style="background:#333; color:#ccc;">Cancel</button>
+                    <button id="save-profile-btn" class="control-btn" style="background:var(--primary-color); color:white;">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="share-overlay" class="share-overlay" style="display: none;">
+            <div class="share-box">
+                <h3>Share to Feed</h3>
+                <p id="share-item-name" style="color:var(--secondary-color); font-weight:bold; margin-bottom:15px;">...</p>
+                <textarea id="share-caption" class="modal-input" placeholder="Write a caption..." rows="3"></textarea>
+                <div class="share-actions" style="margin-top:15px;">
+                    <button id="cancel-share-btn" class="control-btn" style="background:#333; color:#ccc;">Cancel</button>
+                    <button id="confirm-share-btn" class="control-btn" style="background:var(--primary-color); color:white;">Post</button>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="feed.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Feed</span></a>
+            <a href="profile.html" class="nav-item active"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></a>
+            <a href="instrument.html" class="nav-item"><span class="nav-icon">🎸</span><span class=\"nav-label\">Instrument</span></a>
+            <a href="hunt.html" class="nav-item"><span class="nav-icon">🔎</span><span class="nav-label">Hunt</span></a>
+        </nav>
+    </div>
+
+    <script src="theme.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html>

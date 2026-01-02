@@ -1,0 +1,83 @@
+/* auth.css */
+
+.auth-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1; /* Takes remaining height */
+    padding: 20px;
+    padding-bottom: 80px; /* Clear bottom nav */
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--card-bg-color);
+    padding: 30px 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    border: 1px solid rgba(100, 100, 100, 0.1);
+}
+
+/* Google Button */
+.google-btn {
+    width: 100%;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    background: #ffffff; color: #333;
+    border: none; border-radius: 25px;
+    padding: 12px;
+    font-size: 1em; font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.google-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
+
+/* Divider */
+.divider {
+    position: relative; margin: 20px 0; border-bottom: 1px solid rgba(100,100,100,0.2);
+}
+.divider span {
+    position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    background: var(--card-bg-color); padding: 0 10px; color: var(--text-muted); font-size: 0.8em;
+}
+
+/* Tabs */
+.auth-tabs { display: flex; border-bottom: 1px solid rgba(100,100,100,0.2); margin-bottom: 20px; }
+.tab-btn {
+    flex: 1; background: none; border: none;
+    color: var(--text-muted); padding: 10px; font-weight: bold; cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+.tab-btn.active { color: var(--secondary-color); border-bottom-color: var(--secondary-color); }
+
+/* Views & Inputs */
+.auth-view { display: none; flex-direction: column; gap: 15px; }
+.auth-view.active { display: flex; }
+
+input {
+    width: 100%; padding: 12px;
+    background: rgba(0,0,0,0.2); border: 1px solid #444;
+    color: var(--text-color); border-radius: 8px; outline: none;
+}
+input:focus { border-color: var(--secondary-color); }
+
+.primary-btn {
+    background: var(--primary-color); color: white; border: none;
+    padding: 12px; border-radius: 25px; font-weight: bold; font-size: 1em;
+    cursor: pointer; margin-top: 10px;
+}
+.primary-btn:hover { filter: brightness(1.1); transform: scale(1.02); }
+
+.switch-msg {
+    margin-top: 15px; font-size: 0.85em; color: var(--text-muted);
+    cursor: pointer; text-decoration: underline;
+}
+
+/* Status Messages */
+.auth-status-message {
+    margin-top: 20px; padding: 10px; border-radius: 6px;
+    font-size: 0.9em; min-height: 20px; display: none;
+}
+.auth-status-message:not(:empty) { display: block; }

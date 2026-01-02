@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Octapad Studio - PianoMitra</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="octapad.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script src="config.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        
+        <header class="top-bar">
+            <button onclick="history.back()" class="back-btn">← Studio</button>
+            <div class="lcd-screen">
+                <span id="kit-name">STD KIT</span>
+                <span id="status-text">READY</span>
+            </div>
+            <button id="record-btn" class="record-btn">●</button>
+        </header>
+
+        <main class="octapad-interface">
+            
+            <div class="controls-row">
+                <div class="knob-group">
+                    <label>Volume</label>
+                    <input type="range" id="vol-slider" min="0" max="100" value="80">
+                </div>
+                <div class="knob-group">
+                    <label>Reverb</label>
+                    <input type="range" id="verb-slider" min="0" max="100" value="30">
+                </div>
+            </div>
+
+            <div class="pad-grid">
+                <div class="pad" data-sound="crash" data-key="q">
+                    <span class="pad-label">CRASH</span>
+                </div>
+                <div class="pad" data-sound="tom1" data-key="w">
+                    <span class="pad-label">TOM 1</span>
+                </div>
+                <div class="pad" data-sound="tom2" data-key="e">
+                    <span class="pad-label">TOM 2</span>
+                </div>
+                <div class="pad" data-sound="ride" data-key="r">
+                    <span class="pad-label">RIDE</span>
+                </div>
+
+                <div class="pad" data-sound="hihat" data-key="a">
+                    <span class="pad-label">HI-HAT</span>
+                </div>
+                <div class="pad" data-sound="snare" data-key="s">
+                    <span class="pad-label">SNARE</span>
+                </div>
+                <div class="pad" data-sound="kick" data-key="d">
+                    <span class="pad-label">KICK</span>
+                </div>
+                <div class="pad" data-sound="clap" data-key="f">
+                    <span class="pad-label">CLAP</span>
+                </div>
+            </div>
+
+            <p class="instruction-text">Tap pads or use keys Q-W-E-R / A-S-D-F</p>
+
+        </main>
+
+        <div id="save-modal" class="modal-overlay">
+            <div class="modal-box">
+                <h3>Save Beat 💾</h3>
+                <input type="text" id="track-name" placeholder="Beat Name (e.g. Funky Groove)" class="modal-input">
+                <div class="modal-actions">
+                    <button id="cancel-save" class="control-btn" style="background:#444;">Discard</button>
+                    <button id="confirm-save" class="control-btn" style="background:var(--secondary-color); color:white;">Save to Profile</button>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="feed.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Feed</span></a>
+            <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></a>
+            <a href="instrument.html" class="nav-item active"><span class="nav-icon">🎸</span><span class="nav-label">Instruments</span></a>
+            <a href="hunt.html" class="nav-item"><span class="nav-icon">🔎</span><span class="nav-label">Hunt</span></a>
+        </nav>
+    </div>
+
+    <script src="octapad.js"></script>
+</body>
+</html>

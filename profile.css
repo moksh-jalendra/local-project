@@ -1,0 +1,113 @@
+/* profile.css */
+
+.profile-section {
+    padding-bottom: 90px; 
+    background: var(--bg-color);
+    min-height: 100vh;
+}
+
+/* Header & Avatar */
+.profile-header {
+    background: var(--card-bg-color);
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(100,100,100,0.1);
+}
+
+.profile-avatar {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, var(--secondary-color), #0088cc);
+    color: white; font-size: 2.5em; font-weight: bold;
+    display: flex; justify-content: center; align-items: center;
+    border-radius: 50%; margin: 0 auto 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.settings-icon-btn {
+    background: none; border: none; font-size: 1.5em; cursor: pointer; 
+    color: var(--text-color); margin-left: auto; padding: 5px;
+    transition: transform 0.3s;
+}
+.settings-icon-btn:hover { transform: rotate(90deg); }
+
+.stats-row { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+.stat-box { background: rgba(0,0,0,0.1); padding: 10px 15px; border-radius: 8px; text-align: center; min-width: 70px; border: 1px solid rgba(100,100,100,0.1); }
+.stat-box span { display: block; font-size: 1.1em; font-weight: bold; color: var(--text-color); }
+.stat-box label { font-size: 0.7em; color: var(--text-muted); text-transform: uppercase; }
+
+.tab-container { display: flex; border-bottom: 1px solid rgba(100,100,100,0.1); margin-top: 10px; }
+.tab-btn { flex: 1; padding: 15px; background: none; border: none; color: var(--text-muted); font-weight: bold; cursor: pointer; border-bottom: 2px solid transparent; }
+.tab-btn.active { color: var(--secondary-color); border-bottom-color: var(--secondary-color); }
+
+.tab-content { display: none; padding: 15px; }
+.tab-content.active { display: block; }
+.item-list { display: flex; flex-direction: column; gap: 10px; }
+
+.item-card {
+    background: var(--card-bg-color); padding: 15px;
+    border-radius: 8px; border: 1px solid rgba(100,100,100,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+}
+.item-info h4 { margin: 0 0 5px 0; font-size: 1em; color: var(--text-color); }
+.item-info p { margin: 0; font-size: 0.8em; color: var(--text-muted); }
+
+.action-btn { background: none; border: 1px solid #555; color: var(--text-color); padding: 5px 12px; border-radius: 20px; font-size: 0.8em; cursor: pointer; margin-left: 5px; }
+.btn-share { border-color: var(--secondary-color); color: var(--secondary-color); }
+.btn-delete { border-color: #ff4444; color: #ff4444; }
+
+/* Sidebar */
+.sidebar-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); z-index: 1500;
+    display: none; opacity: 0; transition: opacity 0.3s;
+}
+.sidebar-overlay.active { display: block; opacity: 1; }
+
+.sidebar {
+    position: fixed; top: 0; right: 0;
+    width: 280px; height: 100%;
+    background: var(--card-bg-color);
+    box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+    z-index: 1600;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; flex-direction: column;
+}
+.sidebar.active { transform: translateX(0); }
+
+.sidebar-header {
+    padding: 20px; border-bottom: 1px solid rgba(100,100,100,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+}
+.sidebar-header h3 { margin: 0; color: var(--text-color); }
+#close-sidebar-btn { background: none; border: none; font-size: 1.5em; color: var(--text-muted); cursor: pointer; }
+
+.sidebar-menu { padding: 20px; flex-grow: 1; }
+.sidebar-item {
+    width: 100%; text-align: left; padding: 15px;
+    background: none; border: none; color: var(--text-color);
+    font-size: 1em; cursor: pointer; border-radius: 8px;
+    transition: background 0.2s; display: flex; align-items: center; gap: 10px;
+}
+.sidebar-item:hover { background: rgba(100,100,100,0.1); }
+.sidebar-divider { height: 1px; background: rgba(100,100,100,0.1); margin: 10px 0; }
+.sidebar-item.logout { color: #ff4444; }
+
+/* Modals & Inputs */
+.share-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; }
+.share-box { background: var(--card-bg-color); width: 100%; max-width: 400px; padding: 25px; border-radius: 12px; text-align: center; border: 1px solid var(--secondary-color); box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+
+/* Unified Input Style for Edit & Share */
+.modal-input {
+    width: 100%; padding: 10px;
+    background: rgba(0,0,0,0.1); 
+    border: 1px solid #555;
+    color: var(--text-color); 
+    border-radius: 8px; 
+    outline: none; 
+    font-family: inherit;
+    resize: none;
+}
+.modal-input:focus { border-color: var(--secondary-color); }
+
+.share-actions { display: flex; gap: 10px; justify-content: center; }

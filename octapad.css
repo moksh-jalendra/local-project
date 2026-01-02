@@ -1,0 +1,130 @@
+/* octapad.css - Drum Machine Styles */
+
+.octapad-interface {
+    padding: 10px;
+    padding-bottom: 90px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* LCD Screen in Header */
+.lcd-screen {
+    background: #222;
+    color: var(--secondary-color);
+    font-family: 'Courier New', monospace;
+    padding: 5px 15px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    font-size: 0.9em;
+    display: flex;
+    gap: 15px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+}
+#status-text { color: #ff4444; font-weight: bold; }
+
+/* Record Button */
+.record-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ff4444;
+    background: none;
+    color: #ff4444;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.record-btn.recording {
+    background: #ff4444;
+    color: white;
+    box-shadow: 0 0 15px #ff4444;
+    animation: blink 1s infinite;
+}
+@keyframes blink { 50% { opacity: 0.5; } }
+
+/* Controls */
+.controls-row {
+    display: flex; justify-content: space-between; padding: 0 20px; margin-bottom: 20px;
+}
+.knob-group { text-align: center; width: 45%; }
+.knob-group label { display: block; font-size: 0.8em; color: var(--text-muted); margin-bottom: 5px; }
+input[type=range] { width: 100%; accent-color: var(--secondary-color); }
+
+/* PAD GRID SYSTEM */
+.pad-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 Columns */
+    grid-template-rows: repeat(2, 1fr);    /* 2 Rows */
+    gap: 10px;
+    height: 60vh; /* Takes up most of screen */
+    max-height: 400px;
+}
+
+.pad {
+    background: #2a2a2a;
+    border-radius: 8px;
+    border-bottom: 6px solid #1a1a1a; /* 3D Effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.05s, border-bottom 0.05s, background 0.1s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.pad-label {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #555;
+    pointer-events: none;
+}
+
+/* Active Hit State */
+.pad:active, .pad.hit {
+    transform: translateY(4px);
+    border-bottom: 2px solid #1a1a1a;
+    background: #333;
+}
+
+/* Colors per Pad Type */
+.pad[data-sound="kick"] { border-top: 3px solid #ff3366; }
+.pad[data-sound="snare"] { border-top: 3px solid #00bfff; }
+.pad[data-sound="hihat"] { border-top: 3px solid #ffd700; }
+.pad[data-sound="crash"], .pad[data-sound="ride"] { border-top: 3px solid #00e676; }
+
+/* Light Up Effect */
+.pad.hit[data-sound="kick"] { box-shadow: 0 0 20px rgba(255, 51, 102, 0.4); }
+.pad.hit[data-sound="snare"] { box-shadow: 0 0 20px rgba(0, 191, 255, 0.4); }
+
+.instruction-text {
+    text-align: center; color: #666; font-size: 0.8em; margin-top: 15px;
+}
+
+/* Modal Styling (Reused from Profile, ensures consistency) */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); z-index: 2000;
+    display: none; justify-content: center; align-items: center;
+}
+.modal-box {
+    background: var(--card-bg-color); padding: 25px; border-radius: 12px;
+    width: 90%; max-width: 350px; text-align: center;
+    border: 1px solid var(--secondary-color);
+}
+.modal-input {
+    width: 100%; padding: 10px; margin: 15px 0; background: rgba(0,0,0,0.2);
+    border: 1px solid #555; color: white; border-radius: 5px; outline: none;
+}
+.modal-actions { display: flex; gap: 10px; justify-content: center; }
+
+/* Mobile Optimization */
+@media (max-width: 600px) {
+    .pad-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2x4 Grid on phones */
+        grid-template-rows: repeat(4, 1fr);
+        height: 70vh;
+    }
+}

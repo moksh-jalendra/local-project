@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - PianoMitra</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="auth.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script src="config.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        
+        <header class="top-bar">
+            <button onclick="history.back()" class="back-btn" style="background:none; border:none; color:inherit; font-size:1.2em; cursor:pointer;">← Back</button>
+            <h2>My Studio Access</h2>
+        </header>
+
+        <main class="auth-section">
+            
+            <div id="verification-overlay" class="auth-card" style="display: none; text-align: center;">
+                <div style="font-size: 3em; margin-bottom: 10px;">📧</div>
+                <h3 style="color:var(--primary-color);">Verify Your Email</h3>
+                <p style="color:#ccc; margin:15px 0; line-height: 1.5;">
+                    We have sent a verification link to:<br>
+                    <b id="verify-email-display" style="color:var(--secondary-color); word-break: break-all;">...</b>
+                </p>
+                <p style="font-size:0.9em; color:#888;">
+                    Please check your inbox (and spam folder). Click the link in the email, then come back here and login.
+                </p>
+                <button onclick="location.reload()" class="control-btn primary-btn" style="margin-top: 20px; width: 100%;">I have Verified</button>
+            </div>
+
+            <div class="auth-card">
+                <button id="google-btn" class="google-btn">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G" width="20">
+                    Sign in with Google
+                </button>
+
+                <div class="divider"><span>OR</span></div>
+
+                <div class="auth-tabs">
+                    <button class="tab-btn active" data-tab="login">Login</button>
+                    <button class="tab-btn" data-tab="signup">Sign Up</button>
+                </div>
+
+                <div id="login" class="auth-view active">
+                    <input type="email" id="login-email" placeholder="Email Address" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <button id="login-btn" class="control-btn primary-btn">Login</button>
+                    <p class="switch-msg" id="reset-link-btn">Forgot Password?</p>
+                </div>
+
+                <div id="signup" class="auth-view">
+                    <input type="text" id="signup-name" placeholder="Display Name" required>
+                    <input type="email" id="signup-email" placeholder="Email Address" required>
+                    <input type="password" id="signup-password" placeholder="Password (6+ chars)" required>
+                    <button id="signup-btn" class="control-btn primary-btn">Create Account</button>
+                </div>
+
+                <p id="auth-status" class="auth-status-message"></p>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+             <a href="feed.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Feed</span></a>
+             <a href="profile.html" class="nav-item active"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></a>
+             <a href="instrument.html" class="nav-item"><span class="nav-icon">🎸</span><span class="nav-label">Instrument</span></a>
+             <a href="hunt.html" class="nav-item"><span class="nav-icon">🔎</span><span class="nav-label">Hunt</span></a>
+        </nav>
+    </div>
+
+    <script src="theme.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>
