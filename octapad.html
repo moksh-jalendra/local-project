@@ -2,93 +2,108 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Octapad Studio - PianoMitra</title>
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="octapad.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
+    <title>PianoMitra Octapad Studio</title>
     
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-    <script src="config.js"></script>
+    <link rel="stylesheet" href="casio.css"> 
+    <link rel="stylesheet" href="octapad.css"> 
+    <link rel="stylesheet" href="octapad-left.css">
+    <link rel="stylesheet" href="octapad-upper.css">
+    <link rel="stylesheet" href="octapad-right.css">
 </head>
 <body>
-    <div class="app-container">
+
+    <div id="start-overlay">
+        <div class="overlay-content">
+            <h1>🎹 PianoMitra</h1>
+            <p>Rotate to Landscape</p>
+            <button id="start-btn">ENTER STUDIO</button>
+        </div>
+    </div>
+
+    <div class="casio-wrapper">
         
-        <header class="top-bar">
-            <button onclick="history.back()" class="back-btn">← Studio</button>
-            <div class="lcd-screen">
-                <span id="kit-name">STD KIT</span>
-                <span id="status-text">READY</span>
-            </div>
-            <button id="record-btn" class="record-btn">●</button>
-        </header>
-
-        <main class="octapad-interface">
+        <div class="top-panel" id="top-panel">
             
-            <div class="controls-row">
-                <div class="knob-group">
-                    <label>Volume</label>
-                    <input type="range" id="vol-slider" min="0" max="100" value="80">
+            <div class="panel-section left">
+                <div class="brand-area">
+                    <span style="font-size:0.8em; display:block; color:#ccc;">PianoMitra</span>
+                    <span class="brand-piano" style="font-size:1.4em;">Octa</span><span class="brand-mitra" style="font-size:1.4em;">Pad</span>
                 </div>
-                <div class="knob-group">
-                    <label>Reverb</label>
-                    <input type="range" id="verb-slider" min="0" max="100" value="30">
+                
+                <div class="controls-container grid-2x2">
+                    <button id="kit-mode-btn" class="control-btn">🥁 Kit</button> 
+                    <button id="pattern-mode-btn" class="control-btn">🎵 Pattern</button>
+                    <button id="fullscreen-btn" class="control-btn" style="grid-column: span 2;">⛶ Fullscreen</button>
+                </div>
+            </div>
+            
+            <div class="panel-section center">
+                <div class="center-upper-display">
+                    <div id="digital-screen" class="lcd-screen">
+                        <div class="lcd-indicators">
+                            <span id="label-kit" class="indicator">KIT</span>
+                            <span id="label-pattern" class="indicator">PATTERN</span>
+                            <span id="label-learn" class="indicator">LEARN</span>
+                            <span id="label-volume" class="indicator active" style="margin-left:auto; color:#4af626;">VOL</span>
+                        </div>
+                        <div class="lcd-content">
+                            <span id="lcd-text">READY</span>
+                            <select id="lcd-selector" style="display:none;"></select>
+                        </div>
+                        <div id="lcd-status-icon"></div>
+                    </div>
+                </div>
+                
+                <div class="center-lower-nav">
+                    <div class="reference-scroller" id="ref-scroller">
+                        <div class="reference-keys" id="ref-keys"></div> 
+                    </div>
+                    <div class="nav-frame"></div>
+                </div>
+            </div>
+            
+            <div class="panel-section right">
+                <div class="controls-container" style="grid-template-rows: repeat(4, 1fr);">
+                    
+                    <button id="play-toggle-btn" class="control-btn play">▶ Play</button>
+                    <button id="record-toggle-btn" class="control-btn record">● Rec</button>
+                    
+                    <button id="learn-btn" class="control-btn learn-btn">🎓 Learn</button> 
+                    <a href="instrument.html" class="control-btn exit-btn">Exit</a>
+                    
+                    <div class="nav-stack" style="grid-column: span 2;">
+                        <button id="screen-up-btn" class="nav-half-btn">▲</button>
+                        <button id="screen-down-btn" class="nav-half-btn">▼</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="pad-grid">
-                <div class="pad" data-sound="crash" data-key="q">
-                    <span class="pad-label">CRASH</span>
-                </div>
-                <div class="pad" data-sound="tom1" data-key="w">
-                    <span class="pad-label">TOM 1</span>
-                </div>
-                <div class="pad" data-sound="tom2" data-key="e">
-                    <span class="pad-label">TOM 2</span>
-                </div>
-                <div class="pad" data-sound="ride" data-key="r">
-                    <span class="pad-label">RIDE</span>
-                </div>
+        </div>
 
-                <div class="pad" data-sound="hihat" data-key="a">
-                    <span class="pad-label">HI-HAT</span>
-                </div>
-                <div class="pad" data-sound="snare" data-key="s">
-                    <span class="pad-label">SNARE</span>
-                </div>
-                <div class="pad" data-sound="kick" data-key="d">
-                    <span class="pad-label">KICK</span>
-                </div>
-                <div class="pad" data-sound="clap" data-key="f">
-                    <span class="pad-label">CLAP</span>
-                </div>
-            </div>
+        <button id="panel-toggle" class="toggle-bar"><span id="toggle-icon">▲</span></button>
 
-            <p class="instruction-text">Tap pads or use keys Q-W-E-R / A-S-D-F</p>
-
-        </main>
-
-        <div id="save-modal" class="modal-overlay">
-            <div class="modal-box">
-                <h3>Save Beat 💾</h3>
-                <input type="text" id="track-name" placeholder="Beat Name (e.g. Funky Groove)" class="modal-input">
-                <div class="modal-actions">
-                    <button id="cancel-save" class="control-btn" style="background:#444;">Discard</button>
-                    <button id="confirm-save" class="control-btn" style="background:var(--secondary-color); color:white;">Save to Profile</button>
-                </div>
+        <div class="main-keyboard-area">
+            <div class="pads-grid" id="main-pads-grid">
+                <div class="pad" data-sound="crash"><div class="pad-in"></div><span>CRASH</span></div>
+                <div class="pad" data-sound="ride"><div class="pad-in"></div><span>RIDE</span></div>
+                <div class="pad" data-sound="tom1"><div class="pad-in"></div><span>TOM 1</span></div>
+                <div class="pad" data-sound="tom2"><div class="pad-in"></div><span>TOM 2</span></div>
+                <div class="pad" data-sound="hihat"><div class="pad-in"></div><span>HI-HAT</span></div>
+                <div class="pad" data-sound="snare"><div class="pad-in"></div><span>SNARE</span></div>
+                <div class="pad" data-sound="kick"><div class="pad-in"></div><span>KICK</span></div>
+                <div class="pad" data-sound="clap"><div class="pad-in"></div><span>CLAP</span></div>
             </div>
         </div>
 
-        <nav class="bottom-nav">
-            <a href="feed.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Feed</span></a>
-            <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></a>
-            <a href="instrument.html" class="nav-item active"><span class="nav-icon">🎸</span><span class="nav-label">Instruments</span></a>
-            <a href="hunt.html" class="nav-item"><span class="nav-icon">🔎</span><span class="nav-label">Hunt</span></a>
-        </nav>
     </div>
 
-    <script src="octapad.js"></script>
-</body>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script src="config.js"></script>
+
+    <script src="octapad.js"></script>       <script src="octapad-upper.js"></script> <script src="octapad-left.js"></script>  <script src="octapad-right.js"></script> </body>
 </html>

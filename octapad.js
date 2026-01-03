@@ -1,239 +1,233 @@
-// octapad.js - Digital Drum Machine Engine
-// DEPENDENCY: config.js
+// octapad.js - Core Audio Engine
+// DEPENDENCY: config.js must be loaded first
 
-const rtdb = firebase.database();
-const auth = firebase.auth();
+// Use Global DRUM_PADS
+const DRUM_PADS = ['crash', 'ride', 'tom1', 'tom2', 'hihat', 'snare', 'kick', 'clap'];
 
-let audioCtx = null;
-let isRecording = false;
-let startTime = 0;
-let recordedEvents = [];
-let currentUser = null;
-
-// --- 1. AUDIO SYNTHESIS ENGINE ---
-// Generates drum sounds using Math (Oscillators/Noise)
-const DrumSynth = {
-    play(type, vol = 1) {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-
-        const t = audioCtx.currentTime;
-        const masterGain = audioCtx.createGain();
-        masterGain.gain.value = vol;
-        masterGain.connect(audioCtx.destination);
-
-        if (type === 'kick') {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.frequency.setValueAtTime(150, t);
-            osc.frequency.exponentialRampToValueAtTime(0.01, t + 0.5);
-            gain.gain.setValueAtTime(1, t);
-            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
-            osc.connect(gain);
-            gain.connect(masterGain);
-            osc.start(t);
-            osc.stop(t + 0.5);
-        } 
-        else if (type === 'snare') {
-            // Noise
-            const noise = audioCtx.createBufferSource();
-            noise.buffer = this.createNoiseBuffer();
-            const noiseFilter = audioCtx.createBiquadFilter();
-            noiseFilter.type = 'highpass';
-            noiseFilter.frequency.value = 1000;
-            const noiseEnv = audioCtx.createGain();
-            noiseEnv.gain.setValueAtTime(1, t);
-            noiseEnv.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
-            noise.connect(noiseFilter);
-            noiseFilter.connect(noiseEnv);
-            noiseEnv.connect(masterGain);
-            noise.start(t);
-            
-            // Tone
-            const osc = audioCtx.createOscillator();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(100, t);
-            const oscEnv = audioCtx.createGain();
-            oscEnv.gain.setValueAtTime(0.7, t);
-            oscEnv.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
-            osc.connect(oscEnv);
-            oscEnv.connect(masterGain);
-            osc.start(t);
-        }
-        else if (type === 'hihat') {
-            const ratio = [2, 3, 4.16, 5.43, 6.79, 8.21];
-            ratio.forEach(r => {
-                const osc = audioCtx.createOscillator();
-                osc.type = 'square';
-                osc.frequency.value = 150 * r;
-                const gain = audioCtx.createGain();
-                gain.gain.setValueAtTime(0.3, t);
-                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
-                osc.connect(gain);
-                gain.connect(masterGain);
-                osc.start(t);
-                osc.stop(t + 0.1);
-            });
-        }
-        else if (type.includes('tom')) {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            const freq = type === 'tom1' ? 200 : 150;
-            osc.frequency.setValueAtTime(freq, t);
-            osc.frequency.exponentialRampToValueAtTime(freq/2, t + 0.4);
-            gain.gain.setValueAtTime(1, t);
-            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.4);
-            osc.connect(gain);
-            gain.connect(masterGain);
-            osc.start(t);
-            osc.stop(t + 0.5);
-        }
-        else if (type === 'crash' || type === 'ride') {
-            // Metallic noise approximation
-            const osc = audioCtx.createOscillator();
-            osc.type = 'square'; // More harmonics
-            osc.frequency.value = type==='crash'? 200 : 400; // Modulator
-            
-            const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0.3, t);
-            gain.gain.exponentialRampToValueAtTime(0.01, t + (type==='crash'?1.5:0.8));
-            
-            osc.connect(gain);
-            gain.connect(masterGain);
-            osc.start(t);
-            osc.stop(t + 2);
-        }
-        else if (type === 'clap') {
-            const noise = audioCtx.createBufferSource();
-            noise.buffer = this.createNoiseBuffer();
-            const env = audioCtx.createGain();
-            env.gain.setValueAtTime(0, t);
-            env.gain.linearRampToValueAtTime(1, t + 0.01);
-            env.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
-            noise.connect(env);
-            env.connect(masterGain);
-            noise.start(t);
-        }
+// --- DRUM KIT DEFINITIONS ---
+const DRUM_KITS = {
+    'STANDARD': { 
+        title: 'STANDARD', 
+        labels: ['CRASH', 'RIDE', 'TOM 1', 'TOM 2', 'HI-HAT', 'SNARE', 'KICK', 'CLAP'],
+        kick: { freq: 150, dur: 0.5 }, snare: { freq: 250, noise: true }, hihat: { highpass: 5000 }, tom1: { pitch: 200 }, tom2: { pitch: 100 }, clap: { bandpass: 900 } 
     },
-
-    createNoiseBuffer() {
-        if (this._noiseBuffer) return this._noiseBuffer;
-        const bufferSize = audioCtx.sampleRate * 2;
-        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-            data[i] = Math.random() * 2 - 1;
-        }
-        this._noiseBuffer = buffer;
-        return buffer;
+    'TECHNO': { 
+        title: 'TECHNO', 
+        labels: ['PERC 1', 'CYMBAL', 'SUB TOM', 'CLAVE', 'CLOSED H', 'RIMSHOT', 'KICK DEEP', 'FX HIT'],
+        kick: { freq: 80, dur: 0.3 }, snare: { freq: 350, noise: true, short: true }, hihat: { highpass: 8000 }, tom1: { pitch: 150 }, tom2: { pitch: 70 }, clap: { bandpass: 1500 } 
+    },
+    'VINTAGE': { 
+        title: 'VINTAGE', 
+        labels: ['HIGH HAT', 'SNARE LO', 'FLOOR', 'MID TOM', 'PEDAL H', 'SIDE STICK', 'KICK WARM', 'CLAP LO'],
+        kick: { freq: 100, dur: 0.6 }, snare: { freq: 200, noise: true, low: true }, hihat: { highpass: 3500 }, tom1: { pitch: 250 }, tom2: { pitch: 120 }, clap: { bandpass: 600 } 
     }
 };
 
-// --- 2. INTERACTION LOGIC ---
+// --- AUDIO ENGINE ---
+const AudioEngine = {
+    ctx: null, masterGain: null, volume: 0.8, currentKit: 'STANDARD',
+    isRecording: false, recordedSequence: [], startTime: 0, playbackTimeouts: [],
+
+    init() {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioContext();
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.value = this.volume;
+        this.masterGain.connect(this.ctx.destination);
+    },
+    
+    resumeContext() {
+        if(!this.ctx) this.init();
+        if(this.ctx.state === 'suspended') this.ctx.resume();
+    },
+    setVolume(val) {
+        this.volume = Math.max(0.1, Math.min(1, val)); 
+        if(this.masterGain) this.masterGain.gain.value = this.volume;
+        const v = Math.round(this.volume * 100);
+        if(window.DisplayModule) DisplayModule.tempMessage(`VOL: ${v}%`, 800);
+        return v;
+    },
+    setCurrentKit(kitId) {
+        this.currentKit = kitId;
+    },
+    getPadLabels() {
+        const kit = DRUM_KITS[this.currentKit] || DRUM_KITS['STANDARD'];
+        return { pads: DRUM_PADS, names: kit.labels };
+    },
+    startRecording() { 
+        this.isRecording = true; 
+        this.recordedSequence = []; 
+        this.startTime = this.ctx.currentTime * 1000; 
+    },
+    stopRecording() { 
+        this.isRecording = false; 
+        return this.recordedSequence; 
+    },
+    logHit(padType) {
+        if (this.isRecording) { 
+            this.recordedSequence.push({ 
+                pad: padType, 
+                time: (this.ctx.currentTime * 1000) - this.startTime 
+            }); 
+        }
+        if (window.onOctapadHit) window.onOctapadHit(padType);
+    },
+    stopPlayback() {
+        this.playbackTimeouts.forEach(clearTimeout); 
+        this.playbackTimeouts = [];
+    },
+    playSequence(seq, cb) {
+        this.stopPlayback();
+        if (!seq || seq.length === 0) return;
+        this.resumeContext();
+        
+        let maxTime = 0;
+        seq.forEach(evt => {
+            const t = evt.time || 0; 
+            this.playbackTimeouts.push(setTimeout(() => {
+                this.triggerSound(evt.pad); 
+            }, t));
+            maxTime = Math.max(maxTime, t + 1500); 
+        });
+        if(cb) this.playbackTimeouts.push(setTimeout(cb, maxTime + 500));
+    },
+    triggerSound(type) {
+        const kit = DRUM_KITS[this.currentKit] || DRUM_KITS['STANDARD'];
+        const t = this.ctx.currentTime;
+        switch(type) {
+            case 'kick': this._generateKick(t, kit.kick); break;
+            case 'snare': this._generateSnare(t, kit.snare); break;
+            case 'hihat': this._generateHiHat(t, kit.hihat); break;
+            case 'tom1': this._generateTom(t, kit.tom1); break;
+            case 'tom2': this._generateTom(t, kit.tom2, 'low'); break;
+            case 'crash': this._generateCymbal(t, 'crash'); break;
+            case 'ride': this._generateCymbal(t, 'ride'); break;
+            case 'clap': this._generateClap(t, kit.clap); break;
+        }
+    },
+    _generateKick(t, cfg) { 
+        const o=this.ctx.createOscillator(); const g=this.ctx.createGain(); o.connect(g); g.connect(this.masterGain); 
+        o.frequency.setValueAtTime(cfg.freq || 150,t); 
+        o.frequency.exponentialRampToValueAtTime(0.01,t+(cfg.dur||0.5)); 
+        g.gain.setValueAtTime(1,t); 
+        g.gain.exponentialRampToValueAtTime(0.01,t+(cfg.dur||0.5)); 
+        o.start(t); o.stop(t+(cfg.dur||0.5)); 
+    },
+    _generateSnare(t, cfg) {
+        const o=this.ctx.createOscillator(); const og=this.ctx.createGain(); 
+        o.type='triangle'; o.connect(og); og.connect(this.masterGain); 
+        o.frequency.setValueAtTime(cfg.freq || 250,t); og.gain.setValueAtTime(0.5,t); 
+        og.gain.exponentialRampToValueAtTime(0.01,t+0.1); 
+        o.start(t); o.stop(t+0.2); 
+        const dur = cfg.short ? 0.05 : 0.2;
+        const b=this.ctx.createBuffer(1,this.ctx.sampleRate*dur,this.ctx.sampleRate); 
+        const d=b.getChannelData(0); for(let i=0;i<b.length;i++) d[i]=Math.random()*2-1; 
+        const n=this.ctx.createBufferSource(); n.buffer=b; const ng=this.ctx.createGain(); 
+        n.connect(ng); ng.connect(this.masterGain); ng.gain.setValueAtTime(1,t); 
+        ng.gain.exponentialRampToValueAtTime(0.01,t+dur); n.start(t);
+    },
+    _generateHiHat(t, cfg) {
+        const dur=0.1; 
+        const b=this.ctx.createBuffer(1,this.ctx.sampleRate*dur,this.ctx.sampleRate); 
+        const d=b.getChannelData(0); for(let i=0;i<b.length;i++) d[i]=Math.random()*2-1; 
+        const n=this.ctx.createBufferSource(); n.buffer=b; 
+        const f=this.ctx.createBiquadFilter(); f.type='highpass'; f.frequency.value=cfg.highpass || 5000; 
+        const g=this.ctx.createGain(); g.gain.setValueAtTime(0.7,t); g.gain.exponentialRampToValueAtTime(0.01,t+dur); 
+        n.connect(f); f.connect(g); g.connect(this.masterGain); n.start(t);
+    },
+    _generateTom(t, cfg, type) { 
+        const o=this.ctx.createOscillator(); const g=this.ctx.createGain(); o.connect(g); g.connect(this.masterGain); 
+        o.frequency.setValueAtTime(cfg.pitch || 100,t); 
+        o.frequency.exponentialRampToValueAtTime(20,t+0.5); 
+        g.gain.setValueAtTime(0.8,t); g.gain.exponentialRampToValueAtTime(0.01,t+0.5); 
+        o.start(t); o.stop(t+0.5); 
+    },
+    _generateCymbal(t, type) { 
+        const dur=type==='crash'?1.5:0.8; 
+        const b=this.ctx.createBuffer(1,this.ctx.sampleRate*dur,this.ctx.sampleRate); 
+        const d=b.getChannelData(0); for(let i=0;i<b.length;i++) d[i]=Math.random()*2-1; 
+        const n=this.ctx.createBufferSource(); n.buffer=b; 
+        const f=this.ctx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=type==='crash'?3000:5000; f.Q.value=0.5; 
+        const g=this.ctx.createGain(); g.gain.setValueAtTime(0.6,t); g.gain.exponentialRampToValueAtTime(0.01,t+dur); 
+        n.connect(f); f.connect(g); g.connect(this.masterGain); n.start(t); 
+    },
+    _generateClap(t, cfg) { 
+        const dur=0.2; 
+        const b=this.ctx.createBuffer(1,this.ctx.sampleRate*dur,this.ctx.sampleRate); 
+        const d=b.getChannelData(0); for(let i=0;i<b.length;i++) d[i]=Math.random()*2-1; 
+        const n=this.ctx.createBufferSource(); n.buffer=b; 
+        const f=this.ctx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=cfg.bandpass || 900; 
+        const g=this.ctx.createGain(); 
+        g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.8,t+0.01); g.gain.exponentialRampToValueAtTime(0.01,t+0.15); 
+        n.connect(f); f.connect(g); g.connect(this.masterGain); n.start(t); 
+    }
+};
+
+function toggleFullScreen() {
+    const doc = window.document;
+    const docEl = doc.documentElement;
+    const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        requestFullScreen.call(docEl);
+    } else {
+        cancelFullScreen.call(doc);
+    }
+}
+
+function triggerPad(type) {
+    AudioEngine.resumeContext();
+    AudioEngine.triggerSound(type); 
+    AudioEngine.logHit(type);      
+}
 
 document.addEventListener('DOMContentLoaded', () => {
+    AudioEngine.init(); 
+    AudioEngine.setVolume(AudioEngine.volume); 
     
-    auth.onAuthStateChanged(u => currentUser = u);
-
-    const pads = document.querySelectorAll('.pad');
-    const volSlider = document.getElementById('vol-slider');
-
-    // Handle Pad Click/Touch
-    pads.forEach(pad => {
-        // Support both mouse and touch
-        ['mousedown', 'touchstart'].forEach(evt => 
-            pad.addEventListener(evt, (e) => {
-                e.preventDefault(); // Prevent double firing on mobile
-                triggerPad(pad);
-            })
-        );
-    });
-
-    // Handle Keyboard
-    document.addEventListener('keydown', (e) => {
-        if (e.repeat) return; // Prevent machine gunning
-        const pad = document.querySelector(`.pad[data-key="${e.key.toLowerCase()}"]`);
-        if (pad) triggerPad(pad);
-    });
-
-    function triggerPad(pad) {
-        const soundType = pad.dataset.sound;
-        const volume = volSlider.value / 100;
-        
-        // 1. Play Sound
-        DrumSynth.play(soundType, volume);
-
-        // 2. Visual Animation
-        pad.classList.add('hit');
-        setTimeout(() => pad.classList.remove('hit'), 100);
-
-        // 3. Record Event
-        if (isRecording) {
-            const time = Date.now() - startTime;
-            recordedEvents.push({ padId: soundType, time: time });
-        }
-    }
-
-    // --- 3. RECORDING LOGIC ---
-    const recordBtn = document.getElementById('record-btn');
-    const statusText = document.getElementById('status-text');
-    const saveModal = document.getElementById('save-modal');
-
-    recordBtn.addEventListener('click', () => {
-        if (!isRecording) {
-            // Start
-            isRecording = true;
-            startTime = Date.now();
-            recordedEvents = [];
-            recordBtn.classList.add('recording');
-            statusText.innerText = "REC 00:00";
-            
-            // Update Timer UI
-            this.timerInterval = setInterval(() => {
-                const s = Math.floor((Date.now() - startTime) / 1000);
-                statusText.innerText = `REC 00:${s.toString().padStart(2, '0')}`;
-            }, 1000);
-
-        } else {
-            // Stop
-            isRecording = false;
-            clearInterval(this.timerInterval);
-            recordBtn.classList.remove('recording');
-            statusText.innerText = "SAVING...";
-
-            if (recordedEvents.length > 0) {
-                saveModal.style.display = 'flex';
+    // Safety check for display module
+    function tryInitDisplay() {
+        if(window.DisplayModule) {
+            if(document.getElementById('label-kit') && document.getElementById('lcd-text')) {
+                window.DisplayModule.init(); 
             } else {
-                statusText.innerText = "READY";
-                alert("Nothing was recorded.");
+                setTimeout(tryInitDisplay, 50);
             }
         }
+    }
+    tryInitDisplay();
+
+    // Use global 'auth' from config.js
+    auth.onAuthStateChanged(user => {
+        const dot = document.getElementById('lcd-status-icon');
+        if(dot) dot.style.background = user ? '#4af626' : '#ff4444';
     });
 
-    // --- 4. SAVING LOGIC ---
-    document.getElementById('cancel-save').addEventListener('click', () => {
-        saveModal.style.display = 'none';
-        statusText.innerText = "READY";
+    const topPanel = document.getElementById('top-panel');
+    const panelToggle = document.getElementById('panel-toggle');
+    if(panelToggle) panelToggle.addEventListener('click', () => topPanel.classList.toggle('closed'));
+
+    const overlay = document.getElementById('start-overlay');
+    const startBtn = document.getElementById('start-btn');
+    const wrapper = document.querySelector('.casio-wrapper');
+
+    startBtn.addEventListener('click', () => {
+        toggleFullScreen();
+        overlay.style.display = 'none';
+        wrapper.style.opacity = '1';
     });
-
-    document.getElementById('confirm-save').addEventListener('click', () => {
-        if (!currentUser) return alert("Login to save tracks.");
-        const name = document.getElementById('track-name').value || "Untitled Beat";
-
-        const trackData = {
-            title: name,
-            type: 'drum',
-            timestamp: Date.now(),
-            data: recordedEvents,
-            kit: 'standard'
+    
+    const pads = document.querySelectorAll('.pad');
+    pads.forEach(pad => {
+        const sound = pad.dataset.sound;
+        const hit = (e) => {
+            if(e.type === 'touchstart') e.preventDefault();
+            triggerPad(sound);
+            pad.classList.add('hit');
+            setTimeout(() => pad.classList.remove('hit'), 100);
+            if(window.DisplayModule) DisplayModule.tempMessage("PAD: " + sound.toUpperCase(), 500); 
         };
-
-        rtdb.ref(`users/${currentUser.uid}/savedKeys`).push(trackData)
-            .then(() => {
-                alert("Beat Saved Successfully!");
-                saveModal.style.display = 'none';
-                statusText.innerText = "READY";
-            })
-            .catch(e => alert("Error: " + e.message));
+        pad.addEventListener('mousedown', hit);
+        pad.addEventListener('touchstart', hit, { passive: false });
     });
 });
