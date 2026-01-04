@@ -1,4 +1,4 @@
-/* octapad.css - Main Styling & Layout */
+/* octapad.css - Complete Octapad Styling */
 
 :root {
     --pad-body: #222;
@@ -9,88 +9,92 @@
     --accent-color: #ff3366; 
     --brand-blue: #00bfff; 
     --panel-height: 15vh !important; 
+    --bg-dark: #111;
+    --bg-panel: #1a1a1a;
 }
 
-body.light-mode {
-    --pad-body: #dedede;
-    --pad-face: #ccc;
-    --pad-border: #999;
+body, html {
+    width: 100%; height: 100%;
+    margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: var(--bg-dark);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #eee;
+    position: fixed; /* Prevent bounce */
 }
 
-body {
-    position: fixed !important; 
-    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
-    width: 100vw !important; 
-    height: 100vh !important;
-    overflow: hidden !important; 
-    transform: none !important; 
-}
-
-/* OVERLAY: ROTATE Content 90 Degrees */
-#start-overlay {
+/* --- MAIN WRAPPER (Octapad Vertical/Mobile Friendly) --- */
+.casio-wrapper {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    position: relative;
+    transition: opacity 0.5s;
 }
 
-#start-overlay .overlay-content {
-    transform: rotate(90deg);
-    display: flex; 
-    flex-direction: column; 
-    width: auto;
-    height: auto;
-    margin: 0;
-    text-align: center;
+/* --- TOP PANEL CHASSIS (Moved from old casio.css) --- */
+.top-panel {
+    display: flex;
+    height: var(--panel-height);
+    width: 100%;
+    background: var(--bg-panel);
+    border-bottom: 2px solid #000;
+    transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    overflow: hidden;
+    z-index: 10;
 }
 
-#start-overlay .overlay-content h1 { margin-bottom: 10px; }
-#start-overlay .overlay-content p { margin-bottom: 25px; font-size: 1.1em; color: #eee; }
+.top-panel.closed { height: 0 !important; border-bottom: none; }
 
-/* LANDSCAPE ROTATION FIX */
+.panel-section { height: 100%; position: relative; border-right: 2px solid #000; }
+.panel-section:last-child { border-right: none; }
+
+/* --- TOGGLE BAR --- */
+.toggle-bar {
+    width: 100%; height: 25px;
+    background: #222; border: none; border-bottom: 1px solid #333;
+    color: #666; font-size: 0.8em; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9;
+}
+.toggle-bar:hover { background: #333; color: #fff; }
+
+/* --- OVERLAY --- */
+#start-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #000; z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
+}
+.overlay-content { transform: rotate(90deg); text-align: center; }
+#start-btn {
+    background: var(--accent-color); color: white; border: none;
+    padding: 15px 40px; border-radius: 50px; font-weight: bold; margin-top: 20px;
+}
+
+/* --- MOBILE ROTATION FOR OCTAPAD --- */
+/* Forces the Octapad UI to be usable even if phone is portrait by rotating it */
 @media screen and (orientation: portrait) {
     .casio-wrapper {
         position: absolute !important;
         transform: rotate(90deg); 
         transform-origin: 0% 0%; 
-        width: 100vh; 
-        height: 100vw; 
-        top: 0;
-        left: 100%;
-        margin: 0;
-        padding: 0;
+        width: 100vh; height: 100vw; 
+        top: 0; left: 100%;
     }
 }
 
-/* CENTER PANEL ADJUSTMENTS */
-.center-lower-nav {
-    height: 0 !important;
-    border: none !important;
-}
-.center-upper-display {
-    height: 100%; 
-    border-bottom: none;
-}
-
-/* MAIN PAD AREA */
+/* --- PADS GRID --- */
 .main-keyboard-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px; 
-    height: 100%; 
-    width: 100%;
+    flex-grow: 1; display: flex; justify-content: center; align-items: center;
+    padding: 10px; background: #111;
 }
 
 .pads-grid {
-    width: 100%; 
-    height: 100%;
-    max-width: 800px; 
-    max-height: 400px; 
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 1fr 1fr;
-    gap: 15px; 
-    touch-action: none;
+    width: 100%; height: 100%; max-width: 800px; max-height: 400px;
+    display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr 1fr;
+    gap: 15px; touch-action: none;
 }
 
 .pad {
@@ -98,15 +102,11 @@ body {
     cursor: pointer; display: flex; flex-direction: column;
     justify-content: center; align-items: center;
     box-shadow: 0 6px 0 #000; transition: transform 0.05s, background 0.05s;
-    touch-action: none;
-    height: 100%;
 }
 
 .pad:active, .pad.hit {
     transform: translateY(6px); box-shadow: 0 0 0 #000;
-    background: #333; 
-    border-color: var(--brand-blue);
-    filter: brightness(1.2); 
+    background: #333; border-color: var(--brand-blue); filter: brightness(1.2); 
 }
 
 .pad-in {
@@ -114,12 +114,5 @@ body {
     border-radius: 8px; pointer-events: none;
     box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
 }
-
-.pad.hit .pad-in { 
-    background: var(--brand-blue); 
-    box-shadow: 0 0 20px var(--brand-blue); 
-}
-.pad span { 
-    margin-top: 8px; font-size: 0.9em; color: #777; font-weight: bold; 
-    font-family: sans-serif; text-shadow: 0 1px 0 rgba(0,0,0,0.5);
-}
+.pad.hit .pad-in { background: var(--brand-blue); box-shadow: 0 0 20px var(--brand-blue); }
+.pad span { margin-top: 8px; font-size: 0.9em; color: #777; font-weight: bold; }

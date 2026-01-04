@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
     <title>PianoMitra Octapad Studio</title>
     
-    <link rel="stylesheet" href="casio.css"> 
     <link rel="stylesheet" href="octapad.css"> 
     <link rel="stylesheet" href="octapad-left.css">
     <link rel="stylesheet" href="octapad-upper.css">
@@ -56,22 +55,16 @@
                 </div>
                 
                 <div class="center-lower-nav">
-                    <div class="reference-scroller" id="ref-scroller">
-                        <div class="reference-keys" id="ref-keys"></div> 
-                    </div>
                     <div class="nav-frame"></div>
                 </div>
             </div>
             
             <div class="panel-section right">
                 <div class="controls-container" style="grid-template-rows: repeat(4, 1fr);">
-                    
                     <button id="play-toggle-btn" class="control-btn play">▶ Play</button>
                     <button id="record-toggle-btn" class="control-btn record">● Rec</button>
-                    
                     <button id="learn-btn" class="control-btn learn-btn">🎓 Learn</button> 
                     <a href="instrument.html" class="control-btn exit-btn">Exit</a>
-                    
                     <div class="nav-stack" style="grid-column: span 2;">
                         <button id="screen-up-btn" class="nav-half-btn">▲</button>
                         <button id="screen-down-btn" class="nav-half-btn">▼</button>
@@ -101,9 +94,12 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
     <script src="config.js"></script>
 
-    <script src="octapad.js"></script>       <script src="octapad-upper.js"></script> <script src="octapad-left.js"></script>  <script src="octapad-right.js"></script> </body>
+    <script src="octapad.js"></script>
+    <script src="octapad-upper.js"></script>
+    <script src="octapad-left.js"></script>
+    <script src="octapad-right.js"></script> 
+</body>
 </html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>PianoMitra Remixer</title>
+    
+    <link rel="stylesheet" href="casio.css"> <link rel="stylesheet" href="remixer.css">
+    <link rel="stylesheet" href="remixer-left.css">
+    <link rel="stylesheet" href="remixer-upper.css">
+    <link rel="stylesheet" href="remixer-right.css">
+</head>
+<body>
+
+    <div id="start-overlay">
+        <div class="overlay-content">
+            <h1>🎛️ RemixMitra</h1>
+            <p>Layer-by-Layer Audio Editor</p>
+            <button id="start-btn">OPEN STUDIO</button>
+        </div>
+    </div>
+
+    <div class="casio-wrapper">
+        
+        <div class="top-panel" id="top-panel">
+            
+            <div class="panel-section left">
+                <div class="brand-area">
+                    <span class="brand-sub">PianoMitra</span>
+                    <span class="brand-main">Remix</span><span class="brand-accent">Station</span>
+                </div>
+                <div class="controls-grid">
+                    <button id="play-btn" class="control-btn play">▶ Play</button>
+                    <button id="stop-btn" class="control-btn stop">■ Stop</button>
+                    <button id="loop-btn" class="control-btn loop active">↻ Loop</button>
+                </div>
+            </div>
+            
+            <div class="panel-section center">
+                <div class="center-upper-display">
+                    <div id="digital-screen" class="lcd-screen">
+                        <div class="lcd-header">
+                            <span id="ind-bpm">120 BPM</span>
+                            <span id="ind-time">00:00:00</span>
+                        </div>
+                        <div class="lcd-main">
+                            <canvas id="visualizer-canvas"></canvas>
+                        </div>
+                        <div class="lcd-footer">
+                            <span id="ind-status">READY</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-section right">
+                <div class="controls-grid">
+                    <button id="add-track-btn" class="control-btn action">+ Track</button>
+                    <button id="library-btn" class="control-btn library">📂 Library</button>
+                    <a href="instrument.html" class="control-btn exit-btn">Exit</a>
+                </div>
+                <div class="slider-group">
+                    <label>Master Vol</label>
+                    <input type="range" id="master-vol" min="0" max="100" value="80">
+                </div>
+            </div>
+        </div>
+
+        <button id="panel-toggle" class="toggle-bar">▲ CONTROLS ▲</button>
+
+        <div class="main-keyboard-area" id="timeline-area">
+            
+            <div class="timeline-ruler" id="time-ruler">
+                </div>
+
+            <div id="tracks-container">
+                </div>
+
+            <div id="playhead" class="playhead"></div>
+        </div>
+
+    </div>
+
+    <div id="library-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Sound Library</h3>
+                <button id="close-lib-btn">✕</button>
+            </div>
+            <div class="modal-tabs">
+                <button class="tab-btn active" data-tab="defaults">Defaults</button>
+                <button class="tab-btn" data-tab="recordings">My Recordings</button>
+            </div>
+            <div class="modal-content">
+                <div id="lib-defaults" class="lib-list active"></div>
+                <div id="lib-recordings" class="lib-list">
+                    <p style="color:#666; text-align:center;">Loading your tracks...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p>Drag items onto a track to add them.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script src="config.js"></script>
+    <script src="remixer-data.js"></script>
+    <script src="remixer.js"></script>
+    <script src="remixer-upper.js"></script>
+    <script src="remixer-left.js"></script>
+    <script src="remixer-right.js"></script>
+    <script src="remixer-app.js"></script>
+
+</body>
+</html>

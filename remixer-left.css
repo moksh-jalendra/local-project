@@ -1,0 +1,15 @@
+/* remixer-left.css */
+.brand-area { text-align: center; margin-bottom: 8px; }
+.brand-sub { display: block; color: #666; font-size: 0.7em; letter-spacing: 1px; }
+.brand-main { color: #fff; font-size: 1.2em; font-weight: bold; }
+.brand-accent { color: var(--brand-purple); font-size: 1.2em; font-weight: bold; }
+
+.controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.control-btn {
+    background: #2a2a2a; border: 1px solid #444; color: #ccc;
+    padding: 8px; border-radius: 4px; cursor: pointer; font-size: 0.8em;
+    display: flex; align-items: center; justify-content: center;
+}
+.play { color: #00e676; border-color: #00e676; }
+.stop { color: #ff3366; border-color: #ff3366; }
+.loop.active { background: var(--brand-cyan); color: #000; }

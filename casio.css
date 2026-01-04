@@ -1,172 +1,108 @@
-/* casio.css - Core Instrument Layout & Chassis */
+/* casio.css - Core Layout & Keyboard */
 
 :root {
-    --bg-dark: #111;
-    --bg-panel: #151515;
-    --border-light: #333;
-    --text-main: #eee;
-    --text-muted: #888;
-    
-    /* Global Dimensions */
-    --panel-height: 140px; /* Default height, can be overridden by specific instruments */
+    --panel-height: 20vh;
     --toggle-height: 20px;
+    --main-key-width: 60px;
+    --main-black-width: 40px;
+    --bg-color: #111;
+    --boundary-color: #ff3366;
+    --accent-color: #ff3366;
 }
+
+body.light-mode { --bg-color: #e0e0e0; }
 
 * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
 
-body, html {
-    width: 100%; height: 100%;
-    overflow: hidden;
-    background-color: var(--bg-dark);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text-main);
-    /* Prevent bounce on iOS */
-    position: fixed;
+body { 
+    background-color: var(--bg-color); 
+    width: 100vw; height: 100vh; 
+    overflow: hidden; 
+    font-family: 'Courier New', monospace; 
+    color: #eee; 
+    position: fixed; /* Lock bounce */
 }
 
-/* --- MAIN WRAPPER --- */
-.casio-wrapper {
-    display: flex;
-    flex-direction: column;
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-    position: relative;
-    transition: opacity 0.5s;
+/* --- OVERLAY --- */
+#start-overlay { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: #000; z-index: 9999; 
+    display: flex; flex-direction: column; 
+    justify-content: center; align-items: center; text-align: center; 
+}
+.overlay-content { transform: rotate(90deg); } /* Initial State for Portrait */
+#start-btn { 
+    padding: 15px 40px; background: var(--accent-color); color: white; 
+    border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold; 
+    cursor: pointer; margin-top: 20px;
 }
 
-/* --- TOP CONTROL PANEL (The Chassis) --- */
-.top-panel {
-    display: flex;
-    height: var(--panel-height);
-    width: 100%;
-    background: var(--bg-panel);
-    border-bottom: 2px solid #000;
-    transition: height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    overflow: hidden;
-    z-index: 10;
+.casio-wrapper { 
+    width: 100%; height: 100%; 
+    display: flex; flex-direction: column; 
+    opacity: 0; transition: opacity 0.5s ease-in; 
 }
 
-.top-panel.closed {
-    height: 0 !important;
-    border-bottom: none;
+/* --- TOP PANEL --- */
+.top-panel { 
+    height: var(--panel-height); 
+    background: #222; 
+    border-bottom: 2px solid #000; 
+    display: flex; flex-direction: row; flex-shrink: 0; 
+    transition: height 0.4s; overflow: hidden; z-index: 10; 
+}
+.top-panel.closed { height: 0 !important; border: none; }
+
+/* --- KEYBOARD AREA --- */
+.main-keyboard-area { 
+    flex-grow: 1; background: #111; 
+    position: relative; overflow: hidden; touch-action: none; 
+}
+.main-keys-scroller { height: 100%; width: 100%; overflow: hidden; }
+.main-keys { display: inline-flex; height: 100%; min-width: max-content; }
+
+/* Keys */
+.key { position: relative; flex-shrink: 0; border-radius: 0 0 8px 8px; cursor: pointer; }
+
+.key.white { 
+    width: var(--main-key-width); height: 100%; 
+    background: white; border: 1px solid #999; 
+    box-shadow: inset 0 -5px 10px rgba(0,0,0,0.1); 
+}
+.key.white.active { background: #ddd; transform: scaleY(0.98); transform-origin: top; }
+
+.key.black { 
+    width: var(--main-black-width); height: 65%; 
+    background: black; z-index: 2; 
+    margin: 0 calc(var(--main-black-width) / -2); 
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.6); border-radius: 0 0 4px 4px; 
+}
+.key.black.active { background: #222; transform: scaleY(0.98); transform-origin: top; }
+
+/* Labels */
+.key-label { 
+    position: absolute; bottom: 5px; left: 0; width: 100%; 
+    text-align: center; font-size: 10px; color: #555; pointer-events: none; 
+    display: none; 
+}
+.main-keys.show-labels .key-label { display: block; }
+.key.black .key-label { color: #ccc; bottom: 8px; }
+
+/* Toggle Bar */
+.toggle-bar { 
+    height: 20px; background: #181818; border: none; 
+    border-top: 1px solid #333; border-bottom: 1px solid #333; 
+    width: 100%; color: #666; cursor: pointer; z-index: 20; 
 }
 
-/* Panel Sections (Left, Center, Right layout defined in sub-files, base here) */
-.panel-section {
-    height: 100%;
-    position: relative;
-}
+/* Boundaries */
+.boundary-block { width: 20px; height: 100%; background: #222; border-right: 2px solid #333; }
 
-/* --- TOGGLE BAR (The Handle) --- */
-.toggle-bar {
-    width: 100%;
-    height: var(--toggle-height);
-    background: #222;
-    border: none;
-    border-bottom: 1px solid #333;
-    color: #666;
-    font-size: 0.8em;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9;
-    box-shadow: 0 4px 5px rgba(0,0,0,0.3);
-    transition: background 0.2s;
-}
-
-.toggle-bar:hover { background: #333; color: #fff; }
-.toggle-bar:active { background: var(--brand-blue, #00bfff); color: #000; }
-
-/* Flip arrow when closed */
-.top-panel.closed + .toggle-bar #toggle-icon {
-    transform: rotate(180deg);
-    display: inline-block;
-}
-
-/* --- MAIN INSTRUMENT AREA --- */
-.main-keyboard-area {
-    flex-grow: 1; /* Takes remaining height */
-    position: relative;
-    background: #1a1a1a;
-    width: 100%;
-    overflow: hidden;
-    /* Center content by default */
-    display: flex;
-    justify-content: center;
-    align-items: flex-end; 
-}
-
-/* --- COMMON UI ELEMENTS --- */
-
-/* Generic Buttons (Base style for all panels) */
-.control-btn {
-    background: #2a2a2a;
-    color: #ccc;
-    border: 1px solid #444;
-    border-radius: 4px;
-    font-family: inherit;
-    cursor: pointer;
-    transition: all 0.1s;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-.control-btn:active {
-    background: #444;
-    color: #fff;
-    transform: translateY(1px);
-}
-
-/* Scrollbar Styling for Lists */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: #111; }
-::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #666; }
-
-/* --- ORIENTATION WARNING OVERLAY --- */
-#start-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: #000;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    transition: opacity 0.5s;
-}
-
-#start-btn {
-    background: var(--accent-color, #ff3366);
-    color: white;
-    border: none;
-    padding: 15px 40px;
-    font-size: 1.2em;
-    font-weight: bold;
-    border-radius: 50px;
-    cursor: pointer;
-    margin-top: 20px;
-    box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
-    animation: pulse-btn 2s infinite;
-}
-
-@keyframes pulse-btn {
-    0% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.7); }
-    70% { box-shadow: 0 0 0 15px rgba(255, 51, 102, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
-}
-
-/* --- MOBILE ORIENTATION LOGIC --- */
-/* If on mobile portrait, force layout rotation or show overlay */
-@media screen and (orientation: portrait) and (max-width: 900px) {
-    /* The specific rotation logic is usually handled in the specific instrument CSS (like octapad.css) 
-       to handle 90deg rotation correctly, but base styles go here. */
-    
-    .top-panel {
-        /* On small screens, we might shrink panel */
-        --panel-height: 120px;
+/* Mobile Rotation Force */
+@media screen and (orientation: portrait) {
+    .casio-wrapper {
+        position: absolute; top: 0; left: 100%; width: 100vh; height: 100vw;
+        transform: rotate(90deg); transform-origin: 0% 0%;
     }
+    .overlay-content { transform: none; } /* Reset overlay text for portrait */
 }

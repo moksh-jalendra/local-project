@@ -1,0 +1,6 @@
+/* remixer-right.css */
+.action { background: var(--brand-purple); color: white; border: none; }
+.library { border-color: var(--brand-cyan); color: var(--brand-cyan); }
+.slider-group { margin-top: auto; text-align: center; }
+.slider-group label { display: block; font-size: 0.7em; color: #888; }
+input[type=range] { width: 100%; accent-color: var(--brand-purple); }

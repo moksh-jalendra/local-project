@@ -1,0 +1,24 @@
+/* casio-custom.css - Specific Component Styles */
+
+/* Practice Mode Highlights */
+.key.practice-correct {
+    background: #00bfff !important;
+    box-shadow: 0 0 15px #00bfff;
+    transition: background 0.1s;
+}
+
+.ref-key.active-ref { 
+    background: #ff3366 !important; 
+    opacity: 1; 
+}
+
+/* Scrollbar Hiding */
+.main-keys-scroller::-webkit-scrollbar { display: none; }
+.reference-scroller::-webkit-scrollbar { display: none; }
+
+/* Overlay Animations */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
