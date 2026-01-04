@@ -1,0 +1,66 @@
+/* profileview.css */
+
+.profile-section {
+    padding-bottom: 90px;
+    background: var(--bg-color);
+    min-height: 100vh;
+}
+
+.profile-header {
+    background: var(--card-bg-color);
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 1px solid rgba(100,100,100,0.1);
+}
+
+.profile-avatar {
+    width: 90px; height: 90px;
+    background: linear-gradient(135deg, #00bfff, #0088cc);
+    color: white; font-size: 2.8em; font-weight: bold;
+    display: flex; justify-content: center; align-items: center;
+    border-radius: 50%; margin: 0 auto 15px;
+    box-shadow: 0 5px 20px rgba(0, 191, 255, 0.3);
+}
+
+#view-name { margin-bottom: 5px; color: var(--text-color); }
+#view-bio { font-size: 0.9em; color: var(--text-muted); margin-bottom: 20px; font-style: italic; }
+
+/* Action Buttons */
+.action-row {
+    display: flex; justify-content: center; gap: 15px; margin-bottom: 25px;
+}
+
+.primary-btn {
+    background: var(--secondary-color); color: #fff; border: none;
+    padding: 10px 25px; border-radius: 25px; font-weight: bold; font-size: 0.9em;
+    min-width: 120px; transition: 0.2s;
+}
+.primary-btn:disabled { background: #555; cursor: default; opacity: 0.7; }
+
+.secondary-btn {
+    background: transparent; border: 2px solid var(--secondary-color); color: var(--secondary-color);
+    padding: 8px 25px; border-radius: 25px; font-weight: bold; font-size: 0.9em;
+}
+
+/* Stats & Tabs (Shared with profile.css structure) */
+.stats-row { display: flex; justify-content: center; gap: 15px; }
+.stat-box { background: rgba(0,0,0,0.1); padding: 10px 15px; border-radius: 8px; text-align: center; min-width: 70px; border: 1px solid rgba(100,100,100,0.1); }
+.stat-box span { display: block; font-size: 1.1em; font-weight: bold; color: var(--text-color); }
+.stat-box label { font-size: 0.7em; color: var(--text-muted); text-transform: uppercase; }
+
+.tab-container { display: flex; border-bottom: 1px solid rgba(100,100,100,0.1); margin-top: 10px; }
+.tab-btn { flex: 1; padding: 15px; background: none; border: none; color: var(--text-muted); font-weight: bold; cursor: pointer; border-bottom: 2px solid transparent; }
+.tab-btn.active { color: var(--secondary-color); border-bottom-color: var(--secondary-color); }
+
+.tab-content { display: none; padding: 15px; }
+.tab-content.active { display: block; }
+
+/* Item List */
+.item-card {
+    background: var(--card-bg-color); padding: 15px;
+    border-radius: 8px; border: 1px solid rgba(100,100,100,0.1);
+    margin-bottom: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.item-info h4 { margin: 0; font-size: 1em; color: var(--text-color); }
+.play-mini-btn { background: var(--secondary-color); border: none; color: white; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; }

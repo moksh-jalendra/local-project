@@ -1,0 +1,48 @@
+/* notification.css */
+
+.notify-section {
+    padding: 10px;
+    padding-bottom: 90px;
+}
+
+.notification-card {
+    background: var(--card-bg-color);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-left: 4px solid transparent;
+    border: 1px solid rgba(100,100,100,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 0.2s;
+}
+
+/* Unread Indication */
+.notification-card.unread {
+    border-left: 4px solid var(--secondary-color);
+    background: rgba(0, 191, 255, 0.05);
+}
+
+.notif-header {
+    display: flex; justify-content: space-between; align-items: center;
+}
+.notif-title { font-weight: bold; color: var(--text-color); font-size: 0.95em; }
+.notif-time { font-size: 0.75em; color: var(--text-muted); }
+
+.notif-body { font-size: 0.9em; color: #ccc; }
+
+.notif-actions {
+    display: flex; gap: 10px; margin-top: 5px;
+}
+
+.btn-accept {
+    background: var(--secondary-color); color: white; border: none;
+    padding: 6px 15px; border-radius: 15px; font-size: 0.85em; cursor: pointer;
+}
+.btn-decline {
+    background: transparent; border: 1px solid #666; color: #888;
+    padding: 6px 15px; border-radius: 15px; font-size: 0.85em; cursor: pointer;
+}
+
+.empty-msg { text-align: center; color: #777; margin-top: 50px; }

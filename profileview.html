@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musician Profile - PianoMitra</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="profileview.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script src="config.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        
+        <header class="top-bar">
+            <button onclick="history.back()" class="back-btn">← Back</button>
+            <h2 id="header-name">Profile</h2>
+            <div style="width: 30px;"></div> </header>
+
+        <main class="profile-section">
+            
+            <div id="loading-state" style="text-align: center; padding: 50px;">
+                <div class="loader-spinner active"></div>
+            </div>
+
+            <div id="profile-content" style="display: none;">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="view-avatar"></div>
+                    <h2 id="view-name">...</h2>
+                    <p id="view-bio">...</p>
+                    
+                    <div class="action-row">
+                        <button id="friend-btn" class="control-btn primary-btn">Add Friend</button>
+                        <button id="message-btn" class="control-btn secondary-btn" style="display:none;">Message</button>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stat-box"><span id="view-tracks-count">0</span><label>Tracks</label></div>
+                        <div class="stat-box"><span id="view-posts-count">0</span><label>Posts</label></div>
+                        <div class="stat-box"><span id="view-friends-count">0</span><label>Friends</label></div>
+                    </div>
+                </div>
+
+                <div class="tab-container">
+                    <button class="tab-btn active" data-tab="view-tracks">Public Tracks</button>
+                    <button class="tab-btn" data-tab="view-posts">Posts</button>
+                </div>
+
+                <div id="view-tracks" class="tab-content active">
+                    <div id="tracks-list" class="item-list"></div>
+                </div>
+                <div id="view-posts" class="tab-content">
+                    <div id="posts-list" class="item-list"></div>
+                </div>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <a href="feed.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Feed</span></a>
+            <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></a>
+            <a href="instrument.html" class="nav-item"><span class="nav-icon">🎸</span><span class="nav-label">Instrument</span></a>
+            <a href="hunt.html" class="nav-item"><span class="nav-icon">🔎</span><span class="nav-label">Hunt</span></a>
+        </nav>
+    </div>
+
+    <script src="audio.js"></script>
+    <script src="theme.js"></script>
+    <script src="profileview.js"></script>
+</body>
+</html>

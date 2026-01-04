@@ -36,6 +36,7 @@
             </div>
 
             <div id="profile-content" style="display: none;">
+                
                 <div class="profile-header">
                     <div class="profile-avatar" id="user-avatar"></div>
                     <h2 id="user-name">...</h2>
@@ -45,6 +46,14 @@
                         <div class="stat-box"><span id="stat-tracks">0</span><label>Tracks</label></div>
                         <div class="stat-box"><span id="stat-posts">0</span><label>Posts</label></div>
                         <div class="stat-box"><span id="stat-friends">0</span><label>Friends</label></div>
+                    </div>
+                </div>
+
+                <div class="friends-section">
+                    <div id="friends-scroller" class="friends-scroller">
+                        <div class="loading-bubble"></div>
+                        <div class="loading-bubble"></div>
+                        <div class="loading-bubble"></div>
                     </div>
                 </div>
 
@@ -83,13 +92,10 @@
         <div id="edit-overlay" class="share-overlay" style="display: none;">
             <div class="share-box">
                 <h3>Edit Profile</h3>
-                
                 <label style="display:block; text-align:left; color:#888; font-size:0.8em; margin-bottom:5px;">Display Name</label>
                 <input type="text" id="edit-name-input" class="modal-input" placeholder="Your Name">
-                
                 <label style="display:block; text-align:left; color:#888; font-size:0.8em; margin-bottom:5px; margin-top:15px;">Bio</label>
                 <textarea id="edit-bio-input" class="modal-input" placeholder="Tell us about your music..." rows="3"></textarea>
-                
                 <div class="share-actions" style="margin-top:20px;">
                     <button id="cancel-edit-btn" class="control-btn" style="background:#333; color:#ccc;">Cancel</button>
                     <button id="save-profile-btn" class="control-btn" style="background:var(--primary-color); color:white;">Save Changes</button>
@@ -112,7 +118,7 @@
         <nav class="bottom-nav">
             <a href="feed.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Feed</span></a>
             <a href="profile.html" class="nav-item active"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></a>
-            <a href="instrument.html" class="nav-item"><span class="nav-icon">🎸</span><span class=\"nav-label\">Instrument</span></a>
+            <a href="instrument.html" class="nav-item"><span class="nav-icon">🎸</span><span class="nav-label">Instrument</span></a>
             <a href="hunt.html" class="nav-item"><span class="nav-icon">🔎</span><span class="nav-label">Hunt</span></a>
         </nav>
     </div>

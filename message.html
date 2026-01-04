@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - PianoMitra</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="message.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script src="config.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        
+        <header class="top-bar">
+            <button onclick="history.back()" class="back-btn">←</button>
+            <div class="chat-header-info">
+                <h2 id="chat-title">Loading...</h2>
+                <span id="chat-status" class="status-indicator"></span>
+            </div>
+            <div style="width: 30px;"></div> </header>
+
+        <main class="chat-section">
+            <div id="message-list" class="message-list">
+                <div class="loader-spinner active" style="margin: 20px auto;"></div>
+            </div>
+        </main>
+
+        <div class="chat-input-area">
+            <input type="text" id="msg-input" placeholder="Type a message..." autocomplete="off">
+            <button id="send-btn" class="send-btn">➤</button>
+        </div>
+
+        <nav class="bottom-nav">
+            <a href="feed.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Feed</span></a>
+            <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></a>
+            <a href="instrument.html" class="nav-item"><span class="nav-icon">🎸</span><span class="nav-label">Instrument</span></a>
+            <a href="hunt.html" class="nav-item"><span class="nav-icon">🔎</span><span class="nav-label">Hunt</span></a>
+        </nav>
+    </div>
+
+    <script src="theme.js"></script>
+    <script src="message.js"></script>
+</body>
+</html>
